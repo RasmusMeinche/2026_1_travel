@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/app.css">
+    <script src="/static/app.js" defer></script>
+    <title>
+        Signup
+    </title>
+</head>
+<body>
+
+
+    <div id="tooltip"></div>
+
+
+<<<<<<< HEAD
+
+
+
+
+
+
+=======
+>>>>>>> 0af4d6bf27077d3678c02afd4de279529ae81d66
+    <form mix-post="/api-create-user">
+
+        <label for="">Username</label>
+        <input  name="user_username" type="text" 
+                mix-post="/api-check-username"
+                mix-input
+                mix-delay="1000"
+<<<<<<< HEAD
+                mix-validate="{{ x.USER_USERNAME_REGEX }}"                
+                >
+=======
+                mix-validate="{{ x.USER_USERNAME_REGEX }}"           
+        >
+>>>>>>> 0af4d6bf27077d3678c02afd4de279529ae81d66
+        <span></span>
+
+        <label for="">First name</label>
+        <input  name="user_first_name" type="text" 
+<<<<<<< HEAD
+                mix-validate="{{ x.USER_FIRST_NAME_REGEX }}"                
+                >
+
+            <button>
+                Create user
+            </button>
+=======
+            mix-validate="{{ x.USER_FIRST_NAME_REGEX }}"
+        >
+
+        <button>
+            Create user
+        </button>
+       
+>>>>>>> 0af4d6bf27077d3678c02afd4de279529ae81d66
+    </form>
+
+
+
+    <script src="/static/mixhtml.js"></script>
+
+</body>
+</html>
