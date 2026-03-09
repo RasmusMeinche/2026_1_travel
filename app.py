@@ -185,26 +185,32 @@ def logout():
 @app.get("/travels")
 def show_travels():
     try:
-        travel_pk = uuid.uuid4().hex
-        travel_fk = x.user_pk()
-        travel_title = x.validate_travel_title()
+        db, cursor = x.db()
+        q = "SELECT * FROM travels"
+        cursor.execute(q)
+        travels = cursor.fetchall()
 
-        return render_template("page_travels.html", x=x, travel_title=travel_title, travel_fk=travel_fk)
+        return render_template("page_travels.html", x=x, travels=travels)
     except Exception as ex:
         ic(ex)
         return "ups"
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
 
 ##############################
 @app.post("/api-create-travel")
 def api_create_travel():
     try:
         travel_pk = uuid.uuid4().hex
-        travel_fk = x.user_pk()
+        travel_fk = x.validate_travel_title()
         travel_title = x.validate_travel_title()
+        travel_country = x.validate_travel_country()
+        travel_location = x.validate_travel_location()
 
         db, cursor = x.db()
         q = "INSERT INTO travels VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(q, (travel_pk, travel_fk, title, country, location, start_date, end_date, description))
+        cursor.execute(q, (travel_pk, travel_fk, travel_title, travel_country, travel_location, travel_start_date, travel_end_date, travel_description))
         db.commit()
     except Exception as ex:
         ic(ex)
