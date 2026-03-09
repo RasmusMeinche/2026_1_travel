@@ -1,0 +1,15 @@
+<form mix-post="/api-create-travel" autocomplete="off">
+    
+    <div>
+        <label for="">
+            Title <span>Minimum {{ x.TRAVEL_TITLE_MIN }} and maximum {{ x.TRAVEL_TITLE_MAX }} characters</span>
+        </label>
+        <input name="user_first_name" type="text" placeholder="Travel title" 
+        mix-validate="{{x.REGEX_TRAVEL_TITLE}}">
+    </div>
+
+
+    <button>
+        Create travel
+    </button>
+</form>

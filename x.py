@@ -57,7 +57,7 @@ def validate_user_last_name():
 REGEX_USER_EMAIL = "^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$"
 def validate_user_email():
     user_email = request.form.get("user_email", "").strip()
-    if not re.match(REGEX_USER_EMAIL, user_email):
+    if not re.match(REGEX_USER_EMAIL, user_email): 
         raise Exception("company_exception user_email")
     return user_email
 
@@ -71,3 +71,13 @@ def validate_user_password():
     if not re.match(REGEX_USER_PASSWORD, user_password):
         raise Exception("company_exception user_password")
     return user_password
+
+##############################
+TRAVEL_TITLE_MIN = 1
+TRAVEL_TITLE_MAX = 200
+REGEX_TRAVEL_TITLE = f"^.{{{TRAVEL_TITLE_MIN},{TRAVEL_TITLE_MAX}}}$"
+def validate_travel_title():
+    travel_title = request.form.get("title", "")
+    if not re.match(REGEX_TRAVEL_TITLE, travel_title):
+        raise Exception("company_exception travel_title")
+    return travel_title
