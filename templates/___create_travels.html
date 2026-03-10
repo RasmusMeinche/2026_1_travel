@@ -1,0 +1,40 @@
+<form mix-post="/api-create-travel" autocomplete="off">
+    
+    <div>
+        <label for="travel_title">Title</label>
+        <input name="travel_title" type="text" placeholder="Travel Title"
+        mix-validate="{{x.REGEX_TRAVEL_TITLE}}">
+    </div>
+
+    <div>
+        <label for="travel_country">Country</label>
+        <input name="travel_country" type="text" placeholder="Travel Country"
+        mix-validate="{{x.REGEX_TRAVEL_COUNTRY}}">
+    </div>
+
+    <div>
+        <label for="travel_location">Location</label>
+        <input name="travel_location" type="text" placeholder="Travel Location"
+        mix-validate="{{x.REGEX_TRAVEL_LOCATION}}">
+    </div>
+
+    <div>
+        <label for="travel_start_date">Start Date</label>
+        <input name="travel_start_date" type="date" placeholder="YYYY-MM-DD">
+    </div>
+
+    <div>
+        <label for="travel_end_date">End Date</label>
+        <input name="travel_end_date" type="date" placeholder="YYYY-MM-DD">
+    </div>
+
+    <div>
+        <label for="travel_description">Description</label>
+        <textarea name="travel_description" placeholder="Travel Description"
+        mix-validate="{{x.REGEX_TRAVEL_DESCRIPTION}}"></textarea>
+    </div>
+
+    <button type="submit">
+        Create Travel
+    </button>
+</form>

@@ -93,7 +93,7 @@ def validate_travel_country():
     return travel_country
 
 ##############################
-TRAVEL__MIN = 1
+TRAVEL_LOCATION_MIN = 1
 TRAVEL_LOCATION_MAX = 200
 REGEX_TRAVEL_LOCATION = f"^.{{{TRAVEL_COUNTRY_MIN},{TRAVEL_COUNTRY_MAX}}}$"
 def validate_travel_location():
@@ -101,3 +101,15 @@ def validate_travel_location():
     if not re.match(REGEX_TRAVEL_COUNTRY, travel_location):
         raise Exception("company_exception travel_location")
     return travel_location
+
+##############################
+TRAVEL_DESCRIPTION_MIN = 1
+TRAVEL_DESCRIPTION_MAX = 500
+REGEX_TRAVEL_DESCRIPTION = f"^.{{{TRAVEL_DESCRIPTION_MIN},{TRAVEL_DESCRIPTION_MAX}}}$"
+def validate_description_title():
+    travel_description = request.form.get("description", "")
+    if not re.match(REGEX_TRAVEL_DESCRIPTION, travel_description):
+        raise Exception("company_exception travel_description")
+    return travel_description
+
+##############################

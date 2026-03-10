@@ -130,6 +130,7 @@ def api_login():
 
         user.pop("user_password")
         session["user"] = user
+        session["user_pk"] = user["user_pk"]
 
         return f"""<browser mix-redirect="/profile"></browser>"""
 
@@ -203,17 +204,25 @@ def show_travels():
 def api_create_travel():
     try:
         travel_pk = uuid.uuid4().hex
-        travel_fk = x.validate_travel_title()
+        user_fk = session.get("user_pk")
+        if not user_fk:
+            raise Exception("No user logged in")
         travel_title = x.validate_travel_title()
         travel_country = x.validate_travel_country()
         travel_location = x.validate_travel_location()
+        travel_start_date = request.form.get("travel_start_date")
+        travel_end_date = request.form.get("travel_end_date")
+        travel_description = x.travel_description()
 
         db, cursor = x.db()
-        q = "INSERT INTO travels VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(q, (travel_pk, travel_fk, travel_title, travel_country, travel_location, travel_start_date, travel_end_date, travel_description))
+        q = "INSERT INTO travels VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(q, (travel_pk, user_fk, travel_title, travel_country, travel_location, travel_start_date, travel_end_date, travel_description))
         db.commit()
+
+        return render_template("page_travels.html", x=x, user=user)
     except Exception as ex:
         ic(ex)
+        return "ups"
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Vært: mariadb
--- Genereringstid: 09. 03 2026 kl. 20:14:57
+-- Genereringstid: 10. 03 2026 kl. 19:46:38
 -- Serverversion: 10.6.20-MariaDB-ubu2004
 -- PHP-version: 8.3.26
 
@@ -18,17 +18,18 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `2026_1_backend`
+-- Database: `2026_1_travel`
 --
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `travel`
+-- Struktur-dump for tabellen `travels`
 --
 
-CREATE TABLE `travel` (
+CREATE TABLE `travels` (
   `travel_pk` char(32) NOT NULL,
+  `user_fk` char(32) NOT NULL,
   `title` varchar(100) NOT NULL,
   `country` varchar(56) NOT NULL,
   `location` varchar(50) NOT NULL,
@@ -38,14 +39,32 @@ CREATE TABLE `travel` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Data dump for tabellen `travels`
+--
+
+INSERT INTO `travels` (`travel_pk`, `user_fk`, `title`, `country`, `location`, `start_date`, `end_date`, `description`) VALUES
+('1', '9670f117b85443b190e2cbfdc51c1105', 'Aa', 'b', 'c', '2025-05-05', '2026-05-05', 'text');
+
+--
 -- Begrænsninger for dumpede tabeller
 --
 
 --
--- Indeks for tabel `travel`
+-- Indeks for tabel `travels`
 --
-ALTER TABLE `travel`
-  ADD PRIMARY KEY (`travel_pk`);
+ALTER TABLE `travels`
+  ADD PRIMARY KEY (`travel_pk`),
+  ADD KEY `user_fk` (`user_fk`);
+
+--
+-- Begrænsninger for dumpede tabeller
+--
+
+--
+-- Begrænsninger for tabel `travels`
+--
+ALTER TABLE `travels`
+  ADD CONSTRAINT `travels_ibfk_1` FOREIGN KEY (`user_fk`) REFERENCES `users` (`user_pk`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
