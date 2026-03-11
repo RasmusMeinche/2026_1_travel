@@ -197,6 +197,7 @@ def show_travels():
         q = "SELECT * FROM travels WHERE user_fk = %s"
         cursor.execute(q, (user_pk,))
         travels = cursor.fetchall()
+        
 
         return render_template("page_travels.html", x=x, travels=travels, user=user)
 
@@ -237,3 +238,114 @@ def api_create_travel():
         if "db" in locals(): db.close()
 
 ##############################
+@app.get("/edit_travels")
+def edit_travels():
+    try:
+        user = session.get("user")
+        user_pk = session.get("user_pk")
+
+        if not user_pk:
+            return redirect("/login")
+
+        db, cursor = x.db()
+
+        q = "SELECT * FROM travels WHERE user_fk = %s"
+        cursor.execute(q, (user_pk,))
+        travels = cursor.fetchall()
+        
+
+        return render_template("page_update_travels.html", x=x, travels=travels, user=user)
+
+    except Exception as ex:
+        ic(ex)
+        return "ups"
+
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+
+##############################
+@app.patch("/edit_travel/<travel_pk>")
+def update_travel(travel_pk):
+    try:
+
+        parts = []
+        values = []
+
+        travel_title = request.form.get("travel_title", "").strip()
+        if travel_title:
+            parts.append("travel_title = %s")
+            values.append(travel_title)
+
+        travel_country = request.form.get("travel_country", "").strip()
+        if travel_country:
+            parts.append("travel_country = %s")
+            values.append(travel_country)
+
+        travel_location = request.form.get("travel_location", "").strip()
+        if travel_location:
+            parts.append("travel_location = %s")
+            values.append(travel_location)
+
+        travel_start_date = request.form.get("travel_start_date", "").strip()
+        if travel_start_date:
+            parts.append("travel_start_date = %s")
+            values.append(travel_start_date)
+
+        travel_end_date = request.form.get("travel_end_date", "").strip()
+        if travel_end_date:
+            parts.append("travel_end_date = %s")
+            values.append(travel_end_date)
+
+        travel_description = request.form.get("travel_description", "").strip()
+        if travel_description:
+            parts.append("travel_description = %s")
+            values.append(travel_description)
+
+        if not parts:
+            return "nothing to update", 400
+
+        partial_query = ", ".join(parts)
+
+        values.append(travel_pk)
+
+        q = f"""
+            UPDATE travels
+            SET {partial_query}
+            WHERE travel_pk = %s
+        """
+
+        db, cursor = x.db()
+        cursor.execute(q, values)
+        db.commit()
+
+        return f"""
+            <browser mix-update="#travel-{travel_pk}" mix-fade-2000>
+            </browser>
+        """
+
+    except Exception as ex:
+        ic(ex)
+        return str(ex), 500
+
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+
+##############################
+@app.delete("/edit_travels/<travel_pk>")
+def delete_travel(travel_pk):
+    try:
+        db, cursor = x.db()
+        q = "DELETE FROM travels WHERE travel_pk = %s"
+        cursor.execute(q, (travel_pk,))
+        db.commit()
+        return f"""
+            <browser mix-remove="#travel-{travel_pk}" mix-fade-2000>
+            </browser>
+        """
+    except Exception as ex:
+        pass
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
