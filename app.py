@@ -186,15 +186,24 @@ def logout():
 @app.get("/travels")
 def show_travels():
     try:
+        user = session.get("user")
+        user_pk = session.get("user_pk")
+
+        if not user_pk:
+            return redirect("/login")
+
         db, cursor = x.db()
-        q = "SELECT * FROM travels"
-        cursor.execute(q)
+
+        q = "SELECT * FROM travels WHERE user_fk = %s"
+        cursor.execute(q, (user_pk,))
         travels = cursor.fetchall()
 
-        return render_template("page_travels.html", x=x, travels=travels)
+        return render_template("page_travels.html", x=x, travels=travels, user=user)
+
     except Exception as ex:
         ic(ex)
         return "ups"
+
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
@@ -212,17 +221,19 @@ def api_create_travel():
         travel_location = x.validate_travel_location()
         travel_start_date = request.form.get("travel_start_date")
         travel_end_date = request.form.get("travel_end_date")
-        travel_description = x.travel_description()
+        travel_description = x.validate_travel_description()
 
         db, cursor = x.db()
         q = "INSERT INTO travels VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
         cursor.execute(q, (travel_pk, user_fk, travel_title, travel_country, travel_location, travel_start_date, travel_end_date, travel_description))
         db.commit()
 
-        return render_template("page_travels.html", x=x, user=user)
+        return f"""<browser mix-redirect="/travels"></browser>"""
     except Exception as ex:
         ic(ex)
         return "ups"
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
+
+##############################

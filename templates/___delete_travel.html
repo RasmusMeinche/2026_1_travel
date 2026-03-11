@@ -1,0 +1,19 @@
+<div id="travel-{{ travel.travel_pk }}" class="travel" mix-fade-3000>
+    
+    <form>
+        <input name="travel_name" type="text" value="{{ travel.travel_name }}">
+        <input name="travel_last_name" type="text" value="{{ travel.travel_last_name }}">
+
+        <button mix-delete="/travels/{{ travel.travel_pk }}">
+            Delete
+        </button>
+        <button mix-get="/travel/{{ travel.travel_pk }}">
+            Show more
+        </button>
+        <button>
+            Update
+        </button>
+    </form>
+
+
+</div>

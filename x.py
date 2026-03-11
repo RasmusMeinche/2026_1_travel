@@ -77,7 +77,7 @@ TRAVEL_TITLE_MIN = 1
 TRAVEL_TITLE_MAX = 200
 REGEX_TRAVEL_TITLE = f"^.{{{TRAVEL_TITLE_MIN},{TRAVEL_TITLE_MAX}}}$"
 def validate_travel_title():
-    travel_title = request.form.get("title", "")
+    travel_title = request.form.get("travel_title", "")
     if not re.match(REGEX_TRAVEL_TITLE, travel_title):
         raise Exception("company_exception travel_title")
     return travel_title
@@ -87,7 +87,7 @@ TRAVEL_COUNTRY_MIN = 1
 TRAVEL_COUNTRY_MAX = 56
 REGEX_TRAVEL_COUNTRY = f"^.{{{TRAVEL_COUNTRY_MIN},{TRAVEL_COUNTRY_MAX}}}$"
 def validate_travel_country():
-    travel_country = request.form.get("country", "")
+    travel_country = request.form.get("travel_country", "")
     if not re.match(REGEX_TRAVEL_COUNTRY, travel_country):
         raise Exception("company_exception travel_country")
     return travel_country
@@ -95,10 +95,10 @@ def validate_travel_country():
 ##############################
 TRAVEL_LOCATION_MIN = 1
 TRAVEL_LOCATION_MAX = 200
-REGEX_TRAVEL_LOCATION = f"^.{{{TRAVEL_COUNTRY_MIN},{TRAVEL_COUNTRY_MAX}}}$"
+REGEX_TRAVEL_LOCATION = f"^.{{{TRAVEL_LOCATION_MIN},{TRAVEL_LOCATION_MAX}}}$"
 def validate_travel_location():
-    travel_location = request.form.get("location", "")
-    if not re.match(REGEX_TRAVEL_COUNTRY, travel_location):
+    travel_location = request.form.get("travel_location", "")
+    if not re.match(REGEX_TRAVEL_LOCATION, travel_location):
         raise Exception("company_exception travel_location")
     return travel_location
 
@@ -106,8 +106,8 @@ def validate_travel_location():
 TRAVEL_DESCRIPTION_MIN = 1
 TRAVEL_DESCRIPTION_MAX = 500
 REGEX_TRAVEL_DESCRIPTION = f"^.{{{TRAVEL_DESCRIPTION_MIN},{TRAVEL_DESCRIPTION_MAX}}}$"
-def validate_description_title():
-    travel_description = request.form.get("description", "")
+def validate_travel_description():
+    travel_description = request.form.get("travel_description", "")
     if not re.match(REGEX_TRAVEL_DESCRIPTION, travel_description):
         raise Exception("company_exception travel_description")
     return travel_description
