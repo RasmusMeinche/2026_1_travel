@@ -1,30 +1,34 @@
 {% include "_header.html" %}
 
 <main>
-        {% include "___create_travels.html" %}
-
-        {% for travel in travels %}
-        <div>
-                <h2>
-                        {{ travel.title }}
-                </h2>
-                <h3>
-                        {{ travel.country }}
-                </h3>
-                <p>
-                        {{ travel.location }}
-                </p>
-                <p>
-                        {{ travel.start_date }}
-                </p>
-                <p>
-                        {{ travel.end_date }}
-                </p>
-                <p>
-                        {{ travel.description }}
-                </p>
+        <div class="travel_container">
+                {% for travel in travels %}
+                        <div class="template">
+                                <div class="grid_1">
+                                        <h2>
+                                                Title: {{ travel.title }}
+                                        </h2>
+                                </div>
+                                <div class="grid_2">
+                                        <p>
+                                                Country: {{ travel.country }}
+                                        </p>
+                                        <p>
+                                                Location: {{ travel.location }}
+                                        </p>
+                                        <p>
+                                                Start date: {{ travel.start_date }}
+                                        </p>
+                                        <p>
+                                                End date: {{ travel.end_date }}
+                                        </p>
+                                        <p>
+                                                Description: {{ travel.description }}
+                                        </p>
+                                </div>
+                        </div>
+                {% endfor %}
         </div>
-        {% endfor %}
 </main>
 
 {% include "_footer.html" %}

@@ -265,41 +265,41 @@ def edit_travels():
         if "db" in locals(): db.close()
 
 ##############################
-@app.patch("/edit_travels/<travel_pk>")
+@app.patch("/edit_travel/<travel_pk>")
 def update_travel(travel_pk):
     try:
 
         parts = []
         values = []
 
-        travel_title = request.form.get("title", "").strip()
+        travel_title = request.form.get("travel_title", "").strip()
         if travel_title:
-            parts.append("title = %s")
+            parts.append("travel_title = %s")
             values.append(travel_title)
 
-        travel_country = request.form.get("country", "").strip()
+        travel_country = request.form.get("travel_country", "").strip()
         if travel_country:
-            parts.append("country = %s")
+            parts.append("travel_country = %s")
             values.append(travel_country)
 
-        travel_location = request.form.get("location", "").strip()
+        travel_location = request.form.get("travel_location", "").strip()
         if travel_location:
-            parts.append("location = %s")
+            parts.append("travel_location = %s")
             values.append(travel_location)
 
-        travel_start_date = request.form.get("start_date", "").strip()
+        travel_start_date = request.form.get("travel_start_date", "").strip()
         if travel_start_date:
-            parts.append("start_date = %s")
+            parts.append("travel_start_date = %s")
             values.append(travel_start_date)
 
-        travel_end_date = request.form.get("end_date", "").strip()
+        travel_end_date = request.form.get("travel_end_date", "").strip()
         if travel_end_date:
-            parts.append("end_date = %s")
+            parts.append("travel_end_date = %s")
             values.append(travel_end_date)
 
-        travel_description = request.form.get("description", "").strip()
+        travel_description = request.form.get("travel_description", "").strip()
         if travel_description:
-            parts.append("description = %s")
+            parts.append("travel_description = %s")
             values.append(travel_description)
 
         if not parts:
@@ -320,9 +320,8 @@ def update_travel(travel_pk):
         db.commit()
 
         return f"""
-        <browser mix-update="#travel-{travel_pk}" mix-fade-2000>
-            Travel updated
-        </browser>
+            <browser mix-update="#travel-{travel_pk}" mix-fade-2000>
+            </browser>
         """
 
     except Exception as ex:
@@ -350,3 +349,17 @@ def delete_travel(travel_pk):
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
+
+##############################
+@app.get("/create-travels")
+def show_create_travel():
+    try:
+        user = session.get("user")
+        if not user:
+            return redirect("/login")
+
+        return render_template("page_create_travel.html", user=user, x=x)
+
+    except Exception as ex:
+        ic(ex)
+        return "ups"

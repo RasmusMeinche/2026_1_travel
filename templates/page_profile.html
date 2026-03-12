@@ -1,12 +1,28 @@
 {% include "_header.html" %}
 
 <main>
-   <section>
+        {% for travel in travels %}
         <div>
-            <h1>My travels:</h1>
+                <h2>
+                        {{ travel.title }}
+                </h2>
+                <h3>
+                        {{ travel.country }}
+                </h3>
+                <p>
+                        {{ travel.location }}
+                </p>
+                <p>
+                        {{ travel.start_date }}
+                </p>
+                <p>
+                        {{ travel.end_date }}
+                </p>
+                <p>
+                        {{ travel.description }}
+                </p>
         </div>
-   </section>
+        {% endfor %}
 </main>
 
 {% include "_footer.html" %}
-    
