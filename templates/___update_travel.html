@@ -1,11 +1,11 @@
 {% for travel in travels %}
-<form id="travel-{{ travel.travel_pk }}" mix-patch="/edit_travel/{{ travel.travel_pk }}">
-    <input name="travel_title" value="{{ travel.title }}">
-    <input name="travel_country" value="{{ travel.country }}">
-    <input name="travel_location" value="{{ travel.location }}">
-    <input type="date" name="travel_start_date" value="{{ travel.start_date }}">
-    <input type="date" name="travel_end_date" value="{{ travel.end_date }}">
-    <input name="travel_description" value="{{ travel.description }}">
+<form id="travel-{{ travel.travel_pk }}" mix-patch="/edit_travels/{{ travel.travel_pk }}">
+    <input name="title" value="{{ travel.title }}">
+    <input name="country" value="{{ travel.country }}">
+    <input name="location" value="{{ travel.location }}">
+    <input type="date" name="start_date" value="{{ travel.start_date }}">
+    <input type="date" name="end_date" value="{{ travel.end_date }}">
+    <input name="description" value="{{ travel.description }}">
     
     <button mix-delete="/edit_travels/{{ travel.travel_pk }}">Delete</button>
     <button>Update</button>
