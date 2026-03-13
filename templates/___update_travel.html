@@ -2,7 +2,7 @@
 <form id="travel-{{ travel.travel_pk }}" mix-patch="/edit_travels/{{ travel.travel_pk }}">
     <span>Title</span>
     <input name="title" value="{{ travel.title }}"
-    mix-validate="{{x.REGEX_TRAVEL_TITLE}}">>
+    mix-validate="{{x.REGEX_TRAVEL_TITLE}}">
     <span>Country</span>
     <input name="country" value="{{ travel.country }}"
     mix-validate="{{x.REGEX_TRAVEL_COUNTRY}}">
