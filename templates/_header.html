@@ -18,12 +18,12 @@
     <nav>
         <div>
         </div>
-        <a href="/travels">Travels</a>
         
         {% if not user %}
         <a href="/login">Login</a>
         <a href="/signup">Signup</a>
         {% else %}
+        <a href="/travels">Travels</a>
         <a href="/edit_travels">Edit travels</a>
         <a href="/create_travel">Create travel</a>
         <a href="/profile">My profile</a>

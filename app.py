@@ -132,7 +132,7 @@ def api_login():
         session["user"] = user
         session["user_pk"] = user["user_pk"]
 
-        return f"""<browser mix-redirect="/profile"></browser>"""
+        return f"""<browser mix-redirect="/travels"></browser>"""
 
     except Exception as ex:
         ic(ex)
@@ -160,15 +160,30 @@ def api_login():
 
 ##############################
 @app.get("/profile")
-@x.no_cache
 def show_profile():
     try:
-        user = session.get("user", "")
-        if not user: return redirect("/login")
-        return render_template("page_profile.html", user=user, x=x)
+        user = session.get("user")
+        user_pk = session.get("user_pk")
+
+        if not user_pk:
+            return redirect("/login")
+
+        db, cursor = x.db()
+
+        q = "SELECT * FROM `users` WHERE user_pk = %s"
+        cursor.execute(q, (user_pk,))
+        user_data = cursor.fetchall()
+        
+
+        return render_template("page_profile.html", x=x, user_data=user_data, user=user)
+
     except Exception as ex:
         ic(ex)
         return "ups"
+
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
 
 
 ##############################
@@ -182,6 +197,84 @@ def logout():
         return "ups" 
 
 
+##############################
+@app.patch("/edit_user/<user_pk>")
+def update_user(user_pk):
+    try:
+
+        parts = []
+        values = []
+
+        user_first_name = x.validate_user_first_name()
+        if user_first_name:
+            parts.append("user_first_name = %s")
+            values.append(user_first_name)
+
+        user_last_name = x.validate_user_last_name()
+        if user_last_name:
+            parts.append("user_last_name = %s")
+            values.append(user_last_name)
+
+        user_email = x.validate_user_email()
+        if user_email:
+            parts.append("user_email = %s")
+            values.append(user_email)
+
+        user_password = x.validate_user_password()
+        if user_password:
+            user_hashed_password = generate_password_hash(user_password)
+            parts.append("user_password = %s")
+            values.append(user_hashed_password)
+
+        if not parts:
+            return "nothing to update", 400
+
+        partial_query = ", ".join(parts)
+
+        values.append(user_pk)
+
+        q = f"""
+            UPDATE users
+            SET {partial_query}
+            WHERE user_pk = %s
+        """
+
+        db, cursor = x.db()
+        cursor.execute(q, values)
+        db.commit()
+
+        return f"""
+        <browser mix-update="#user-{user_pk}" mix-fade-2000>
+            User updated
+        </browser>
+        """
+
+    except Exception as ex:
+        ic(ex)
+        return str(ex), 500
+
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+
+##############################
+@app.delete("/edit_user/<user_pk>")
+def delete_user(user_pk):
+    try:
+        db, cursor = x.db()
+        q = "DELETE FROM users WHERE user_pk = %s"
+        cursor.execute(q, (user_pk,))
+        db.commit()
+        session.clear()
+        return f"""
+            <browser mix-remove="#user-{user_pk}" mix-fade-2000></browser>
+            <browser mix-redirect="/login"></browser>
+        """
+    except Exception as ex:
+        pass
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
 ##############################
 @app.get("/travels")
 def show_travels():
@@ -265,41 +358,41 @@ def edit_travels():
         if "db" in locals(): db.close()
 
 ##############################
-@app.patch("/edit_travel/<travel_pk>")
+@app.patch("/edit_travels/<travel_pk>")
 def update_travel(travel_pk):
     try:
 
         parts = []
         values = []
 
-        travel_title = request.form.get("travel_title", "").strip()
+        travel_title = request.form.get("title", "").strip()
         if travel_title:
-            parts.append("travel_title = %s")
+            parts.append("title = %s")
             values.append(travel_title)
 
-        travel_country = request.form.get("travel_country", "").strip()
+        travel_country = request.form.get("country", "").strip()
         if travel_country:
-            parts.append("travel_country = %s")
+            parts.append("country = %s")
             values.append(travel_country)
 
-        travel_location = request.form.get("travel_location", "").strip()
+        travel_location = request.form.get("location", "").strip()
         if travel_location:
-            parts.append("travel_location = %s")
+            parts.append("location = %s")
             values.append(travel_location)
 
-        travel_start_date = request.form.get("travel_start_date", "").strip()
+        travel_start_date = request.form.get("start_date", "").strip()
         if travel_start_date:
-            parts.append("travel_start_date = %s")
+            parts.append("start_date = %s")
             values.append(travel_start_date)
 
-        travel_end_date = request.form.get("travel_end_date", "").strip()
+        travel_end_date = request.form.get("end_date", "").strip()
         if travel_end_date:
-            parts.append("travel_end_date = %s")
+            parts.append("end_date = %s")
             values.append(travel_end_date)
 
-        travel_description = request.form.get("travel_description", "").strip()
+        travel_description = request.form.get("description", "").strip()
         if travel_description:
-            parts.append("travel_description = %s")
+            parts.append("description = %s")
             values.append(travel_description)
 
         if not parts:
@@ -320,8 +413,10 @@ def update_travel(travel_pk):
         db.commit()
 
         return f"""
-            <browser mix-update="#travel-{travel_pk}" mix-fade-2000>
-            </browser>
+        <browser mix-update="#travel-{travel_pk}">
+            Travel updated
+        </browser>
+         <browser mix-redirect="/travels"></browser>
         """
 
     except Exception as ex:
@@ -351,15 +446,28 @@ def delete_travel(travel_pk):
         if "db" in locals(): db.close()
 
 ##############################
-@app.get("/create-travels")
-def show_create_travel():
+@app.get("/create_travel")
+def show_create_travels():
     try:
         user = session.get("user")
-        if not user:
+        user_pk = session.get("user_pk")
+
+        if not user_pk:
             return redirect("/login")
 
-        return render_template("page_create_travel.html", user=user, x=x)
+        db, cursor = x.db()
+
+        q = "SELECT * FROM travels WHERE user_fk = %s"
+        cursor.execute(q, (user_pk,))
+        travels = cursor.fetchall()
+        
+
+        return render_template("page_create_travel.html", x=x, travels=travels, user=user)
 
     except Exception as ex:
         ic(ex)
         return "ups"
+
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
