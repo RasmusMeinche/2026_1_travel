@@ -57,7 +57,7 @@ def validate_user_last_name():
 REGEX_USER_EMAIL = "^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$"
 def validate_user_email():
     user_email = request.form.get("user_email", "").strip()
-    if not re.match(REGEX_USER_EMAIL, user_email):
+    if not re.match(REGEX_USER_EMAIL, user_email): 
         raise Exception("company_exception user_email")
     return user_email
 
@@ -66,8 +66,56 @@ def validate_user_email():
 USER_PASSWORD_MIN = 8
 USER_PASSWORD_MAX = 50
 REGEX_USER_PASSWORD = f"^.{{{USER_PASSWORD_MIN},{USER_PASSWORD_MAX}}}$"
+
 def validate_user_password():
     user_password = request.form.get("user_password", "").strip()
+
+    if user_password == "":
+        return None
+
     if not re.match(REGEX_USER_PASSWORD, user_password):
         raise Exception("company_exception user_password")
+
     return user_password
+
+##############################
+TRAVEL_TITLE_MIN = 1
+TRAVEL_TITLE_MAX = 200
+REGEX_TRAVEL_TITLE = f"^.{{{TRAVEL_TITLE_MIN},{TRAVEL_TITLE_MAX}}}$"
+def validate_travel_title():
+    travel_title = request.form.get("travel_title", "")
+    if not re.match(REGEX_TRAVEL_TITLE, travel_title):
+        raise Exception("company_exception travel_title")
+    return travel_title
+
+##############################
+TRAVEL_COUNTRY_MIN = 1
+TRAVEL_COUNTRY_MAX = 56
+REGEX_TRAVEL_COUNTRY = f"^.{{{TRAVEL_COUNTRY_MIN},{TRAVEL_COUNTRY_MAX}}}$"
+def validate_travel_country():
+    travel_country = request.form.get("travel_country", "")
+    if not re.match(REGEX_TRAVEL_COUNTRY, travel_country):
+        raise Exception("company_exception travel_country")
+    return travel_country
+
+##############################
+TRAVEL_LOCATION_MIN = 1
+TRAVEL_LOCATION_MAX = 200
+REGEX_TRAVEL_LOCATION = f"^.{{{TRAVEL_LOCATION_MIN},{TRAVEL_LOCATION_MAX}}}$"
+def validate_travel_location():
+    travel_location = request.form.get("travel_location", "")
+    if not re.match(REGEX_TRAVEL_LOCATION, travel_location):
+        raise Exception("company_exception travel_location")
+    return travel_location
+
+##############################
+TRAVEL_DESCRIPTION_MIN = 1
+TRAVEL_DESCRIPTION_MAX = 500
+REGEX_TRAVEL_DESCRIPTION = f"^.{{{TRAVEL_DESCRIPTION_MIN},{TRAVEL_DESCRIPTION_MAX}}}$"
+def validate_travel_description():
+    travel_description = request.form.get("travel_description", "")
+    if not re.match(REGEX_TRAVEL_DESCRIPTION, travel_description):
+        raise Exception("company_exception travel_description")
+    return travel_description
+
+##############################

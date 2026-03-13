@@ -1,0 +1,29 @@
+{% include "_header.html" %}
+
+{% for u in user_data %}
+<main>
+        <section>
+                <div>
+                        <h1>Account</h1>
+                </div>
+                <form id="user-{{ u.user_pk }}" mix-patch="/edit_user/{{ u.user_pk }}">
+                        <span>Firstname</span>
+                        <input name="user_first_name" value="{{ u.user_first_name }}"
+                        mix-validate="{{x.REGEX_USER_FIRST_NAME}}">
+                        <span>Lastname</span>
+                        <input name="user_last_name" value="{{ u.user_last_name }}"
+                        mix-validate="{{x.REGEX_USER_LAST_NAME}}">
+                        <span>Email</span>
+                        <input name="user_email" value="{{ u.user_email }}"
+                        mix-validate="{{x.REGEX_USER_EMAIL}}">
+                        <span>Password</span>
+                        <input type="password" name="user_password" placeholder="New password">
+    
+                        <button id="update_button">Update</button>
+                        <button id="delete_button" mix-delete="/edit_user/{{ u.user_pk }}">Delete User</button>
+                </form>
+        </section>
+</main>
+{% endfor %}
+
+{% include "_footer.html" %}

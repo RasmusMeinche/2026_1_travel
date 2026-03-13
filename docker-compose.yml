@@ -16,7 +16,7 @@ services:
     container_name: 2026_1_travel_mariadb
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: 2026_1_backend
+      MYSQL_DATABASE: 2026_1_travel
     volumes:
       - mariadb_data:/var/lib/mysql
     ports:
